@@ -1,14 +1,53 @@
-# Node modules
+# ========================================
+# BINGO POKER - GIT IGNORE
+# ========================================
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y temporales
+*.log
+tmp/
+temp/
+.cache/
+
+# Credenciales y configuración local
+.env
+.env.local
+.env.production
+config.local.js
+config.local.json
+*.key
+*.pem
+
+# Editores de código
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node modules (si se usa npm)
 node_modules/
 package-lock.json
 
-# Environment variables
-.env
+# Build y distribución
+dist/
+build/
+*.min.js
+*.min.css
 
-# OS files
-.DS_Store
-Thumbs.db
+# Archivos de prueba locales
+test-*.html
+debug-*.js
 
-# Logs
-logs/
-*.log
+# Información sensible
+passwords.txt
+credentials.json
+secrets/
+
+# Backups
+*.bak
+*.backup
+*~

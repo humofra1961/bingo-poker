@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bingo Poker - Juego Familiar Online Sabadito Alegre">
+    <title>Bingo para Poker - Sabadito Alegre</title>
+    
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <img src="assets/images/logo.png" alt="Logo">
+        <!-- Debe tener estas rutas relativas -->
+        <script src="js/utils.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/app.js"></script>
+
+</head>
+<body>
+    <!-- Header Principal -->
+    <header class="game-header">
+        <div class="header-content">
+            <h1>♠ ♥ ♦ ♣ BINGO PARA POKER ♣ ♦ ♥ ♠</h1>
+            <p class="subtitle">SABADITO ALEGRE - Juego Familiar Online</p>
+        </div>
+    </header>
+
+    <!-- Sección de Login -->
+    <section id="login-section" class="game-section">
+        <div class="login-container">
+            <h2>👤 Iniciar Sesión</h2>
+            <p>Ingresa tu correo electrónico para unirte al juego</p>
+            
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico:</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="tu@correo.com" 
+                        aria-label="Correo electrónico para ingreso"
+                        required
+                    >
+                </div>
+                <button type="submit" id="btn-login" class="btn btn-primary">
+                    Entrar al Juego
+                </button>
+            </form>
+
+            <div id="login-message" class="message-container" aria-live="polite"></div>
+            
+            <div class="test-accounts">
+                <p><strong>📧 Correos registrados para pruebas:</strong></p>
+                <ul id="test-emails-list">
+                    <!-- Se llena dinámicamente desde JS -->
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Principal del Juego (Oculta hasta login) -->
+    <section id="game-section" class="game-section hidden">
+        
+        <!-- Barra de Estado -->
+        <div class="status-bar">
+            <div class="connection-status">
+                <span>Estado de conexión:</span>
+                <span id="connection-indicator" class="status-indicator disconnected">
+                    ❌ Desconectado
+                </span>
+            </div>
+            <div class="player-info">
+                <span>👤 Jugador:</span>
+                <span id="player-name">-</span>
+                <button id="btn-logout" class="btn btn-secondary btn-small">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <!-- Mensaje de Reconexión -->
+        <div id="reconnect-message" class="reconnect-message hidden">
+            ✅ Reconectado exitosamente. Tu sesión ha sido restaurada.
+        </div>
+
+        <!-- Contenedor Principal -->
+        <div class="game-container">
+            
+            <!-- Panel Izquierdo: Jugadores Online -->
+            <aside class="sidebar left-sidebar">
+                <div class="panel">
+                    <h3>👥 Jugadores Online</h3>
+                    <ul id="online-players-list" class="players-list">
+                        <!-- Se llena dinámicamente -->
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Panel Central: Área de Juego -->
+            <main class="game-main">
+                
+                <!-- Panel del Cantador -->
+                <div class="announcer-panel">
+                    <h3>🎤 Panel del Cantador</h3>
+                    <div class="announcer-controls">
+                        <button id="btn-draw-card" class="btn btn-primary">
+                            Cantar Nueva Carta
+                        </button>
+                        <button id="btn-close-selection" class="btn btn-secondary">
+                            Cerrar Selección
+                        </button>
+                    </div>
+                    
+                    <div class="announcer-subpanels">
+                        <div class="subpanel">
+                            <h4>🎯 Mis Cartones (Cantador)</h4>
+                            <div id="announcer-cards" class="cards-display"></div>
+                        </div>
+                        
+                        <div class="subpanel">
+                            <h4>📝 Solicitudes de Cambio</h4>
+                            <ul id="change-requests-list" class="requests-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartas Cantadas -->
+                <div class="called-cards-panel">
+                    <h3>🃏 Cartas Cantadas</h3>
+                    <div id="called-cards-display" class="cards-grid"></div>
+                </div>
+
+                <!-- Mis Cartones -->
+                <div class="player-cards-panel">
+                    <h3>🎯 Mis Cartones</h3>
+                    <div class="cards-info">
+                        <span>Tus Cartones: <strong id="my-cards-count">0</strong></span>
+                        <span>Disponibles: <strong id="available-cards-count">20</strong></span>
+                        <span>Bloqueados: <strong id="blocked-cards-count">0</strong></span>
+                        <span>Cartas Cantadas: <strong id="called-cards-count">0</strong></span>
+                    </div>
+                    
+                    <div class="card-selection-info">
+                        <p>🎯 Selecciona tus Cartones</p>
+                        <p class="selection-hint">
+                            Elige entre los 20 cartones disponibles. Puedes seleccionar hasta 3 cartones.
+                        </p>
+                        <p class="poker-rules">
+                            ★ POKER: 4 cartas del mismo valor | ★ FULL: 2+3 del mismo valor
+                        </p>
+                    </div>
+                    
+                    <div id="player-cards-grid" class="cards-grid"></div>
+                </div>
+
+                <!-- Controles de Juego -->
+                <div class="game-controls">
+                    <h3>🎮 Controles:</h3>
+                    <ul class="controls-list">
+                        <li><kbd>TAB</kbd> - Mover entre casillas</li>
+                        <li><kbd>ENTER</kbd> - Marcar/Desmarcar carta</li>
+                        <li><kbd>CLICK</kbd> - Marcar/Desmarcar carta</li>
+                        <li><kbd>MOUSE</kbd> - Navegar y seleccionar</li>
+                    </ul>
+                </div>
+            </main>
+
+            <!-- Panel Derecho: Opciones -->
+            <aside class="sidebar right-sidebar">
+                <div class="panel">
+                    <h3>⚙️ Opciones</h3>
+                    <div class="options-buttons">
+                        <button id="btn-request-change" class="btn btn-secondary">
+                            Solicitar Cambio
+                        </button>
+                        <button id="btn-toggle-cards" class="btn btn-secondary">
+                            Ver/Ocultar Cartas
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+        <p>&copy; 2024 Bingo Poker - Sabadito Alegre. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
